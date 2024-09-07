@@ -10,7 +10,7 @@ class PL(models.Model):
     aktif = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
-        verbose_name_plural = 'PL (Profil Lulusan)'
+        verbose_name_plural = '1. PL (Profil Lulusan)'
 
     def __str__(self):
         return self.kodePl + ' - ' + self.deskripsi
@@ -27,7 +27,7 @@ class CPL(models.Model):
     pl = models.ManyToManyField(PL)
 
     class Meta:
-        verbose_name_plural = 'CPL (Capaian Pembelajaran Lulusan)'
+        verbose_name_plural = '2. CPL (Capaian Pembelajaran Lulusan)'
 
     def __str__(self):
         return self.kodeCpl + ' - ' + self.deskripsi
@@ -45,7 +45,7 @@ class BK(models.Model):
     cpl = models.ManyToManyField(CPL)
 
     class Meta:
-        verbose_name_plural = 'BK (Bahan Kajian)'
+        verbose_name_plural = '3. BK (Bahan Kajian)'
 
     def __str__(self):
         return self.kodeBk + '-' + self.nama
@@ -59,10 +59,9 @@ class MK(models.Model):
     semester = models.SmallIntegerField(null=True, blank=True)
     deskripsi = models.TextField(null=True, blank=True)
     aktif = models.BooleanField(default=True, blank=False, null=False)
-    cpl = models.ManyToManyField(CPL)
 
     class Meta:
-        verbose_name_plural = 'MK (Mata Kuliah)'
+        verbose_name_plural = '5. MK (Mata Kuliah)'
 
     def __str__(self):
         return self.kodeMk + '-' + self.nama
@@ -75,14 +74,13 @@ class CPMK(models.Model):
     aktif = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
-        verbose_name_plural = 'CPMK (Capaian Pembelajaran Mata Kuliah)'
+        verbose_name_plural = '4. CPMK (Capaian Pembelajaran Mata Kuliah)'
 
     def __str__(self):
         return self.kodeCpmk + ' - ' + self.deskripsi
 
 
-class CPL_CPMK_MK(models.Model):
-    cpl = models.ForeignKey(CPL, on_delete=models.CASCADE)
+class CPMK_MK(models.Model):
     cpmk = models.ForeignKey(CPMK, on_delete=models.CASCADE)
     mk = models.ForeignKey(MK, on_delete=models.CASCADE)
     mbkm = models.BooleanField(default=False, blank=True, null=True)
@@ -110,63 +108,32 @@ class CPL_CPMK_MK(models.Model):
     kriteria = models.CharField(max_length=250, null=True, blank=True)
     bobot = models.CharField(max_length=250, null=True, blank=True)
 
-    #tahapPenilaian = models.CharField(max_length=250)
-    #teknikPenilaian = models.CharField(max_length=250)
-    #instrumen = models.CharField(max_length=250)
-    #kriteria = models.CharField(max_length=250)
-    #bobot = models.CharField(max_length=250)
-
     aktif = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
-        verbose_name_plural = 'CPL - CPMK - MK'
+        verbose_name_plural = '6. CPMK - MK'
 
     def __str__(self):
-        return self.cpl.kodeCpl + ' - ' + self.cpmk.kodeCpmk + ' - ' + self.mk.kodeMk + ' - ' + self.mk.nama + ' - ' + self.cpmk.deskripsi
+        return self.cpmk.kodeCpmk + ' - ' + self.mk.kodeMk + ' - ' + self.mk.nama + ' - ' + self.cpmk.deskripsi
 
 
-class CPMK_MK(models.Model):
-    cpmk = models.ForeignKey(CPMK, on_delete=models.CASCADE)
-    mk = models.ForeignKey(MK, on_delete=models.CASCADE)
-    aktif = models.BooleanField(default=True, blank=False, null=False)
-
-    class Meta:
-        verbose_name_plural = 'CPMK - MK'
-
-    def __str__(self):
-        return self.cpmk.kodeCpmk + ' - ' + self.mk.kodeMk + ' - ' + self.mk.nama
-
-
-# class SUBCPMK(models.Model):
-#    cpl_cpmk_mk = models.ForeignKey(
-#        CPL_CPMK_MK, on_delete=models.CASCADE, null=True, blank=True)
-#    kodeSubCpmk = models.CharField(max_length=10, unique=True)
-#    deskripsi = models.TextField(null=True, blank=True)
-
-#    class Meta:
-#        verbose_name_plural = 'SUB CPMK'
-
-#    def __str__(self):
-#        return self.cpl_cpmk_mk.cpmk.kodeCpmk + ' - ' + self.cpl_cpmk_mk.mk.kodeMk + ' - '+self.kodeSubCpmk + ' - ' + self.deskripsi
-
-
-class SUBCPMK(models.Model):
-    cpl_cpmk_mk = models.ForeignKey(CPL_CPMK_MK, on_delete=models.CASCADE,
-                                    help_text='Ketik Kode CPMK dan MK pada kotak search di atas untuk mempermudah penginputan')
+class SUBCPMK2(models.Model):
+    cpmk_mk = models.ForeignKey(CPMK_MK, on_delete=models.CASCADE,
+                                help_text='Ketik Kode CPMK dan MK pada kotak search di atas untuk mempermudah penginputan')
     kodeSubCpmk = models.CharField(max_length=50, blank=True, unique=True)
     deskripsi = models.TextField(null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = 'SUB CPMK'
+        verbose_name_plural = '7. SUB CPMK'
 
     def save(self, *args, **kwargs):
         if not self.kodeSubCpmk:
             # Ambil kode parent
-            parent_code = self.cpl_cpmk_mk.cpmk.kodeCpmk + '_' + self.cpl_cpmk_mk.mk.kodeMk
+            parent_code = self.cpmk_mk.cpmk.kodeCpmk + '_' + self.cpmk_mk.mk.kodeMk
 
             # Cari kode anak dengan prefix parent_code tertinggi
-            max_code = SUBCPMK.objects.filter(
-                cpl_cpmk_mk=self.cpl_cpmk_mk).aggregate(Max('kodeSubCpmk'))
+            max_code = SUBCPMK2.objects.filter(
+                cpmk_mk=self.cpmk_mk).aggregate(Max('kodeSubCpmk'))
 
             if max_code['kodeSubCpmk__max']:
                 # Ekstrak angka terakhir dari kode
@@ -181,4 +148,4 @@ class SUBCPMK(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.cpl_cpmk_mk.cpmk.kodeCpmk + ' - ' + self.cpl_cpmk_mk.mk.kodeMk + ' - '+self.kodeSubCpmk + ' - ' + self.deskripsi
+        return self.cpmk_mk.cpmk.kodeCpmk + ' - ' + self.cpmk_mk.mk.kodeMk + ' - '+self.kodeSubCpmk + ' - ' + self.deskripsi

@@ -3,8 +3,8 @@ from dal import autocomplete
 
 # Create your views here.
 from rest_framework import generics
-from .models import PL, CPL, BK, MK, CPMK, CPMK_MK, SUBCPMK, CPL_CPMK_MK
-from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer, CpmkSerializer, Cpmk_MkSerializer, SubCpmkSerializer, Cpl_Cpmk_MkSerializer
+from .models import PL, CPL, BK, MK, CPMK, CPMK_MK, SUBCPMK2
+from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer, CpmkSerializer, Cpmk_MkSerializer, SubCpmk2Serializer
 
 #from rest_framework.decorators import api_view, renderer_classes
 #from rest_framework.response import Response
@@ -65,11 +65,6 @@ class Cpmk_MkListView(generics.ListAPIView):
     serializer_class = Cpmk_MkSerializer
 
 
-class SubCpmkListView(generics.ListAPIView):
-    queryset = SUBCPMK.objects.all()
-    serializer_class = SubCpmkSerializer
-
-
-class Cpl_Cpmk_MkListView(generics.ListAPIView):
-    queryset = CPL_CPMK_MK.objects.all()
-    serializer_class = Cpl_Cpmk_MkSerializer
+class SubCpmk2ListView(generics.ListAPIView):
+    queryset = SUBCPMK2.objects.all()
+    serializer_class = SubCpmk2Serializer

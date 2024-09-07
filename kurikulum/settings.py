@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django_select2',
     'dal',
     'dal_select2',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ MIDDLEWARE = [
     # 'corsheaders.middleware.CorsMiddleware',
 ]
 
-#Ini setlah folder dirubah jadi huruf kecil maka url juga dirubah huruf kecil kurikulum
+# Ini setlah folder dirubah jadi huruf kecil maka url juga dirubah huruf kecil kurikulum
 ROOT_URLCONF = 'kurikulum.urls'
 
 TEMPLATES = [
@@ -102,7 +103,7 @@ TEMPLATES = [
     },
 ]
 
-#Ini juga dirubah jadi K Kecil
+# Ini juga dirubah jadi K Kecil
 WSGI_APPLICATION = 'kurikulum.wsgi.application'
 
 
@@ -157,8 +158,12 @@ USE_TZ = True
 
 
 #STATIC_URL = 'static/'
+
+
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = [BASE_DIR / "static", ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 #STATIC_ROOT = BASE_DIR / 'staticfiles'
 #STATIC_URL = '/static/'
 

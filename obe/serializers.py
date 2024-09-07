@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PL, CPL, BK, MK, CPMK, CPMK_MK, SUBCPMK, CPL_CPMK_MK
+from .models import PL, CPL, BK, MK, CPMK, CPMK_MK, SUBCPMK2
 
 
 class PlSerializer(serializers.ModelSerializer):
@@ -42,13 +42,7 @@ class Cpmk_MkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SubCpmkSerializer(serializers.ModelSerializer):
+class SubCpmk2Serializer(serializers.ModelSerializer):
     class Meta:
-        model = SUBCPMK
-        fields = '__all__'
-
-
-class Cpl_Cpmk_MkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CPL_CPMK_MK
+        model = SUBCPMK2
         fields = '__all__'
