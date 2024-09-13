@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from dal import autocomplete
+from rest_framework import viewsets
 
 # Create your views here.
 from rest_framework import generics
@@ -25,6 +26,16 @@ from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer
 
 class PlListView(generics.ListAPIView):
     queryset = PL.objects.all()
+    serializer_class = PlSerializer
+
+
+class PlViewSet(viewsets.ModelViewSet):
+    # queryset = Kabupaten.objects.all().prefetch_related(
+    queryset = PL.objects.all().prefetch_related(
+        'cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__subcpmk2_cpmk_mk', 'cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__cpmk')
+    # PlListView2(generics.ListAPIView):
+    #queryset = PL.objects.prefetch_related('cpl')
+    # 'pl__cpl__bk__mk__cpmk_mk__cpmk'
     serializer_class = PlSerializer
 
 
@@ -62,6 +73,12 @@ class CpmkListView(generics.ListAPIView):
 
 class Cpmk_MkListView(generics.ListAPIView):
     queryset = CPMK_MK.objects.all()
+    serializer_class = Cpmk_MkSerializer
+
+
+class Cpmk_MkViewSet(viewsets.ModelViewSet):
+    queryset = CPMK_MK.objects.prefetch_related(
+        'cpmk', 'mk', 'cpmk__cpl', 'cpmk__cpl__pl', 'mk__bk', 'mk__bk__cpl')  # Optimisasi query
     serializer_class = Cpmk_MkSerializer
 
 

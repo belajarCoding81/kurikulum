@@ -24,7 +24,7 @@ class CPL(models.Model):
                 ('P', 'Pengetahuan'),
                 ('K', 'Keterampilan')]
     unsur = models.CharField(choices=pilUnsur, max_length=1)
-    pl = models.ManyToManyField(PL)
+    pl = models.ManyToManyField(PL, related_name='cpl_pl')
 
     class Meta:
         verbose_name_plural = '2. CPL (Capaian Pembelajaran Lulusan)'
@@ -42,7 +42,7 @@ class BK(models.Model):
                 ('4', 'Sumber Lain')]
     acuan = models.CharField(choices=pilAcuan, max_length=1)
     aktif = models.BooleanField(default=True, blank=False, null=False)
-    cpl = models.ManyToManyField(CPL)
+    cpl = models.ManyToManyField(CPL, related_name='bk_cpl')
 
     class Meta:
         verbose_name_plural = '3. BK (Bahan Kajian)'
@@ -52,7 +52,7 @@ class BK(models.Model):
 
 
 class MK(models.Model):
-    bk = models.ForeignKey(BK, on_delete=models.CASCADE)
+    bk = models.ForeignKey(BK, on_delete=models.CASCADE, related_name='mk_bk')
     kodeMk = models.CharField(max_length=10, unique=True)
     nama = models.CharField(max_length=150)
     sks = models.SmallIntegerField(null=False, blank=False)
@@ -68,7 +68,8 @@ class MK(models.Model):
 
 
 class CPMK(models.Model):
-    cpl = models.ForeignKey(CPL, on_delete=models.CASCADE)
+    cpl = models.ForeignKey(
+        CPL, on_delete=models.CASCADE, related_name='cpmk_cpl')
     kodeCpmk = models.CharField(max_length=10, unique=True)
     deskripsi = models.TextField(null=True, blank=True)
     aktif = models.BooleanField(default=True, blank=False, null=False)
@@ -81,8 +82,10 @@ class CPMK(models.Model):
 
 
 class CPMK_MK(models.Model):
-    cpmk = models.ForeignKey(CPMK, on_delete=models.CASCADE)
-    mk = models.ForeignKey(MK, on_delete=models.CASCADE)
+    cpmk = models.ForeignKey(
+        CPMK, on_delete=models.CASCADE, related_name='cpmk_mk_cpmk')
+    mk = models.ForeignKey(MK, on_delete=models.CASCADE,
+                           related_name='cpmk_mk_mk')
     mbkm = models.BooleanField(default=False, blank=True, null=True)
     bobotMbkm = models.SmallIntegerField(null=True, blank=True)
     partisipasi = models.BooleanField(
@@ -119,7 +122,7 @@ class CPMK_MK(models.Model):
 
 class SUBCPMK2(models.Model):
     cpmk_mk = models.ForeignKey(CPMK_MK, on_delete=models.CASCADE,
-                                help_text='Ketik Kode CPMK dan MK pada kotak search di atas untuk mempermudah penginputan')
+                                help_text='Ketik Kode CPMK dan MK pada kotak search di atas untuk mempermudah penginputan', related_name='subcpmk2_cpmk_mk')
     kodeSubCpmk = models.CharField(max_length=50, blank=True, unique=True)
     deskripsi = models.TextField(null=True, blank=True)
 
