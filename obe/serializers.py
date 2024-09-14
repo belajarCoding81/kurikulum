@@ -10,8 +10,14 @@ class SubCpmk2Serializer(serializers.ModelSerializer):
 
 
 class Cpmk_MkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CPMK_MK
+        fields = '__all__'
+
+
+class Cpmk_Mk2Serializer(serializers.ModelSerializer):
     subcpmk2_cpmk_mk = SubCpmk2Serializer(many=True)
-    cpmk = serializers.StringRelatedField()
+    #cpmk = serializers.StringRelatedField()
 
     class Meta:
         model = CPMK_MK
@@ -19,7 +25,13 @@ class Cpmk_MkSerializer(serializers.ModelSerializer):
 
 
 class MkSerializer(serializers.ModelSerializer):
-    cpmk_mk_mk = Cpmk_MkSerializer(many=True)
+    class Meta:
+        model = MK
+        fields = '__all__'
+
+
+class Mk2Serializer(serializers.ModelSerializer):
+    cpmk_mk_mk = Cpmk_Mk2Serializer(many=True)
 
     class Meta:
         model = MK
@@ -27,18 +39,29 @@ class MkSerializer(serializers.ModelSerializer):
 
 
 class CpmkSerializer(serializers.ModelSerializer):
-    cpmk_mk_cpmk = Cpmk_MkSerializer(many=True)
+    class Meta:
+        model = CPMK
+        fields = '__all__'
+
+
+class Cpmk2Serializer(serializers.ModelSerializer):
+    cpmk_mk_cpmk = Cpmk_Mk2Serializer(many=True)
 
     class Meta:
         model = CPMK
         fields = '__all__'
 
+
 #CPMK_MK, SUBCPMK, CPL_CPMK_MK
 
-
 class BkSerializer(serializers.ModelSerializer):
-    # cpl = CplSerializer(many=True)  # Menampilkan cpl
-    mk_bk = MkSerializer(many=True)  # Menampilkan mk
+    class Meta:
+        model = BK
+        fields = '__all__'
+
+
+class Bk2Serializer(serializers.ModelSerializer):
+    mk_bk = Mk2Serializer(many=True)  # Menampilkan mk
 
     class Meta:
         model = BK
@@ -46,9 +69,14 @@ class BkSerializer(serializers.ModelSerializer):
 
 
 class CplSerializer(serializers.ModelSerializer):
-    bk_cpl = BkSerializer(many=True)
-    # pl = PlSerializer(many=True)  # Menampilkan pl
-    cpmk_cpl = CpmkSerializer(many=True)  # Menampilkan cpmk
+    class Meta:
+        model = CPL
+        fields = '__all__'
+
+
+class Cpl2Serializer(serializers.ModelSerializer):
+    bk_cpl = Bk2Serializer(many=True)
+    # cpmk_cpl = Cpmk2Serializer(many=True)  # Menampilkan cpmk
 
     class Meta:
         model = CPL
@@ -56,7 +84,13 @@ class CplSerializer(serializers.ModelSerializer):
 
 
 class PlSerializer(serializers.ModelSerializer):
-    cpl_pl = CplSerializer(many=True)
+    class Meta:
+        model = PL
+        fields = '__all__'
+
+
+class Pl2Serializer(serializers.ModelSerializer):
+    cpl_pl = Cpl2Serializer(many=True)
 
     class Meta:
         model = PL

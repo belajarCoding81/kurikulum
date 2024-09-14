@@ -1,11 +1,19 @@
+import csv
+from django.http import HttpResponse
+
 from django.shortcuts import render
 from dal import autocomplete
 from rest_framework import viewsets
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 # Create your views here.
 from rest_framework import generics
 from .models import PL, CPL, BK, MK, CPMK, CPMK_MK, SUBCPMK2
-from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer, CpmkSerializer, Cpmk_MkSerializer, SubCpmk2Serializer
+from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer, CpmkSerializer, Cpmk_MkSerializer
+from .serializers import Pl2Serializer, Cpl2Serializer, Bk2Serializer, Mk2Serializer, Cpmk2Serializer, Cpmk_Mk2Serializer, SubCpmk2Serializer
 
 #from rest_framework.decorators import api_view, renderer_classes
 #from rest_framework.response import Response
@@ -23,6 +31,28 @@ from .serializers import PlSerializer, CplSerializer, BkSerializer, MkSerializer
 # Kembalikan data yang diserialisasi
 #    return Response(serializer.data)
 
+class ExportCSVView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Ambil data queryset
+        pl = PL.objects.all()
+        serializer = PlSerializer(pl, many=True)
+
+        # Siapkan response HTTP untuk file CSV
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="pl.csv"'
+
+        # Buat writer untuk menulis CSV
+        writer = csv.writer(response)
+        # Header CSV
+        writer.writerow(['id', 'kodePl', 'deskripsi', 'aktif'])
+
+        # Tulis data ke dalam file CSV
+        for item in serializer.data:
+            writer.writerow([item['id'], item['kodePl'],
+                            item['deskripsi'], item['aktif']])
+
+        return response
+
 
 class PlListView(generics.ListAPIView):
     queryset = PL.objects.all()
@@ -30,13 +60,12 @@ class PlListView(generics.ListAPIView):
 
 
 class PlViewSet(viewsets.ModelViewSet):
-    # queryset = Kabupaten.objects.all().prefetch_related(
-    queryset = PL.objects.all().prefetch_related(
-        'cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__subcpmk2_cpmk_mk', 'cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__cpmk')
+    queryset = PL.objects.all()
+    #queryset = PL.objects.all().prefetch_related('cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__subcpmk2_cpmk_mk', 'cpl_pl__bk_cpl__mk_bk__cpmk_mk_mk__cpmk')
     # PlListView2(generics.ListAPIView):
     #queryset = PL.objects.prefetch_related('cpl')
     # 'pl__cpl__bk__mk__cpmk_mk__cpmk'
-    serializer_class = PlSerializer
+    serializer_class = Pl2Serializer
 
 
 class CplListView(generics.ListAPIView):

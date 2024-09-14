@@ -68,8 +68,7 @@ class MK(models.Model):
 
 
 class CPMK(models.Model):
-    cpl = models.ForeignKey(
-        CPL, on_delete=models.CASCADE, related_name='cpmk_cpl')
+    #cpl = models.ForeignKey(CPL, on_delete=models.CASCADE, related_name='cpmk_cpl')
     kodeCpmk = models.CharField(max_length=10, unique=True)
     deskripsi = models.TextField(null=True, blank=True)
     aktif = models.BooleanField(default=True, blank=False, null=False)
