@@ -47,11 +47,9 @@ REST_FRAMEWORK = {
 # ]
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 '6a43-2001-448a-5080-3721-c131-5ef4-5a44-b656.ngrok-free.app',
-                 'belajarCoding81.pythonanywhere.com']
+                 'kiosbeta.pythonanywhere.com']
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://6a43-2001-448a-5080-3721-c131-5ef4-5a44-b656.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = []
 
 # 0910-182-3-197-81.ngrok-free.app
 # https://0910-182-3-197-81.ngrok-free.app
