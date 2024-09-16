@@ -13,6 +13,7 @@ router.register(r'pl2', PlViewSet)
 urlpatterns = [
     path('pl/', PlListView.as_view(), name='pl-list'),
     #path('pl2/', PlListView2.as_view(), name='pl-list2'),
+    #path('pl2/', PlViewSet.as_view({'get': 'list'}), name='pl-list2'),
     path('cpl/', CplListView.as_view(), name='cpl-list'),
     path('bk/', BkListView.as_view(), name='bk-list'),
     path('mk/', MkListView.as_view(), name='mk-list'),
