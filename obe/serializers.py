@@ -61,13 +61,7 @@ class Cpmk_Mk2Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = CPMK_MK
-        #fields = '__all__'
-        fields = [
-            'cpmk', 'mk', 'mbkm', 'bobotMbkm', 'partisipasi', 'bobotPartisipasi',
-            'observasi', 'bobotObservasi', 'unjukKerja', 'bobotUnjukKerja',
-            'uts', 'bobotUts', 'uas', 'bobotUas', 'tesLisan', 'bobottesLisan',
-            'subcpmk2_cpmk_mk'
-        ]
+        fields = '__all__'
 
 
 class Mk2Serializer(serializers.ModelSerializer):
